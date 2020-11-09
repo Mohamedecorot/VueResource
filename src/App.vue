@@ -39,7 +39,8 @@ export default {
     }
   },
   mounted () {
-    this.$http.get('https://jsonplaceholder.typicode.com/users/').then((response) => {
+    this.$user = this.$resource('https://jsonplaceholder.typicode.com/users{/id}')
+    this.$user.query().then((response) => {
       this.users = response.data
     }, (response) => {
       console.log('erreur', response)
@@ -48,9 +49,7 @@ export default {
   methods: {
     save (user) {
       this.loading = true
-      this.$http.put('https://jsonplaceholder.typicode.com/users/' + user.id, {
-        name: user.name
-      }).then((response) => {
+      this.$user.update({ id: user.id }, { name: user.name }).then((response) => {
       }, (response) => {
         console.log('erreur', response)
       }).then(_ => {
@@ -59,7 +58,7 @@ export default {
     },
     destroy (user) {
       this.loading = true
-      this.$http.delete('https://jsonplaceholder.typicode.com/users/' + user.id).then((response) => {
+      this.$user.remove({ id: user.id }).then((response) => {
         this.users = this.users.filter(u => u !== user)
       }, (response) => {
         console.log('erreur', response)
