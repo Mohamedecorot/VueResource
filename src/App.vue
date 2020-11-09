@@ -58,6 +58,14 @@ export default {
       })
     },
     destroy (user) {
+      this.loading = true
+      this.$http.delete('https://jsonplaceholder.typicode.com/users/' + user.id).then((response) => {
+        this.users = this.users.filter(u => u !== user)
+      }, (response) => {
+        console.log('erreur', response)
+      }).then(_ => {
+        this.loading = false
+      })
     }
   }
 }
